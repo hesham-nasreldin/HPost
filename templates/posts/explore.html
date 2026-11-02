@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Explore Posts</h1>
+
+  {% for post in posts %}
+    <div class="post">
+      <h2>{{ post.title }}</h2>
+      <p>{{ post.content }}</p>
+      <span>Posted By: {{ post.user.username }}</span>
+      <span>Published: {{ post.created_at }}</span>
+    </div>
+
+  {% empty %}
+    <p>No posts available.</p>
+  {% endfor %}
+{% endblock content %}

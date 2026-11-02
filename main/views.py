@@ -1,7 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, DeleteView
 from django.views.generic.list import ListView
 
 from .models import Posts
@@ -33,8 +32,19 @@ class PostsView(LoginRequiredMixin, ListView):
 
 class AllPostsView(ListView):
     model = Posts
-    template_name = "posts/posts.html"
+    template_name = "posts/explore.html"
     context_object_name = "posts"
 
     def get_queryset(self):
         return Posts.objects.select_related("user").order_by("-created_at")
+
+
+class DeletePostView(LoginRequiredMixin, DeleteView):
+    model = Posts
+    template_name = "posts/post_confirm_delete.html"
+    success_url = reverse_lazy("posts")
+
+    def get_queryset(self):
+        return Posts.objects.filter(
+            user=self.request.user
+        )
