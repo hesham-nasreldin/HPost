@@ -7,7 +7,7 @@ from .models import Posts
 
 
 # Create your views here.
-
+# creating new posts
 class NewPost(LoginRequiredMixin, CreateView):
     model = Posts
     fields = ["title", "content"]
@@ -18,7 +18,7 @@ class NewPost(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
-
+# Displays user's posts only.
 class PostsView(LoginRequiredMixin, ListView):
     model = Posts
     template_name = "posts/posts.html"
@@ -29,7 +29,7 @@ class PostsView(LoginRequiredMixin, ListView):
             user=self.request.user
         )
 
-
+# Explores all other users posts.
 class AllPostsView(ListView):
     model = Posts
     template_name = "posts/explore.html"
@@ -39,6 +39,7 @@ class AllPostsView(ListView):
         return Posts.objects.select_related("user").order_by("-created_at")
 
 
+# Deleting posts
 class DeletePostView(LoginRequiredMixin, DeleteView):
     model = Posts
     template_name = "posts/post_confirm_delete.html"
@@ -50,6 +51,7 @@ class DeletePostView(LoginRequiredMixin, DeleteView):
         )
 
 
+# Editing Posts
 class EditPostView(LoginRequiredMixin, UpdateView):
     model = Posts
     fields = ["title", "content"]
@@ -58,5 +60,5 @@ class EditPostView(LoginRequiredMixin, UpdateView):
 
     def get_queryset(self):
         return Posts.objects.filter(
-            user = self.request.user
+            user=self.request.user
         )
