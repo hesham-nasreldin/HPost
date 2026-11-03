@@ -9,6 +9,10 @@
       <p>{{ post.content }}</p>
       <span>Posted By: {{ post.user.username }}</span>
       <span>Published: {{ post.created_at }}</span>
+      {% if post.user == request.user %}
+        <a href="{% url 'delete-post' post.pk %}">Delete</a>
+        <a href="{% url 'edit-post' post.pk %}">Edit</a>
+      {% endif %}
     </div>
 
   {% empty %}
