@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView, DeleteView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic.list import ListView
 
 from .models import Posts
@@ -47,4 +47,16 @@ class DeletePostView(LoginRequiredMixin, DeleteView):
     def get_queryset(self):
         return Posts.objects.filter(
             user=self.request.user
+        )
+
+
+class EditPostView(LoginRequiredMixin, UpdateView):
+    model = Posts
+    fields = ["title", "content"]
+    template_name = "posts/edit_post.html"
+    success_url = reverse_lazy("posts")
+
+    def get_queryset(self):
+        return Posts.objects.filter(
+            user = self.request.user
         )
